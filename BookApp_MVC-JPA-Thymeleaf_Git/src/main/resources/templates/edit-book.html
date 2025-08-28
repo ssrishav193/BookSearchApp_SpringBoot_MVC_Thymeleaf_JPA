@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Edit Book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="edit.png" type="image/x-icon">
+    <style>
+       body {
+	     margin: 0;
+	     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	     /*background: linear-gradient(120deg, #a0c1b8, #fefefe);*/
+	     background: linear-gradient(120deg, rgba(74, 144, 226, 0.65) 0%,
+		         rgba(160, 193, 184, 0.55) 100%),
+		         url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80')
+		         no-repeat center center fixed;
+	     background-size: cover;
+	     min-height: 100vh;
+	     display: flex;
+	     flex-direction: column;
+	     align-items: center;
+	     padding: 20px 10px;
+        }
+        header {
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 28px;
+        }
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 13px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2f4f4f;
+            font-weight: 600;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 7px;
+            box-shadow: 1px 1px 6px rgba(63,77,77,0.13);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover {
+            background: #3a8fd7;
+            color: white;
+        }
+        main {
+            background: white;
+            max-width: 490px;
+            width: 98vw;
+            border-radius: 17px;
+            box-shadow: 0 4px 28px rgba(0,0,0,0.12);
+            padding: 28px 24px 17px 24px;
+            margin-top: 9px;
+            text-align: center;
+        }
+        h1 {
+            color: #114b5f;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            letter-spacing: 0.7px;
+        }
+        hr {
+            border: none;
+            border-bottom: 1.7px solid #ddd;
+            margin: 15px 0 14px;
+        }
+        .msg {
+            font-weight: 600;
+            color: #1b8c39;
+            min-height: 22px;
+            margin-bottom: 7px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            color: #243b55;
+            font-size: 1.07rem;
+            margin: 8px 0 1px 0;
+            text-align: left;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 97%;
+            padding: 10px;
+            border: 1.7px solid #b3c8db;
+            border-radius: 7px;
+            font-size: 1rem;
+            outline-color: #5a9bd6;
+            margin-bottom: 11px;
+            transition: border 0.19s;
+            background: #f9fcff;
+        }
+        input[readonly] {
+            background: #f5f5fa;
+            color: #8b8b8b;
+        }
+        input[type="file"] {
+            margin-top: 3px;
+            margin-bottom: 13px;
+            width: 97%;
+        }
+        input:focus {
+            border-color: #3a8fd7;
+            box-shadow: 0 0 6px #82aaff;
+        }
+        .preview-img {
+            display: block;
+            border-radius: 5px;
+            background: #e7eaf6;
+            box-shadow: 0 2.5px 8px rgba(80, 80, 150, 0.11);
+            margin: 7px 0 12px 0;
+            height: 100px;
+        }
+        button[type="submit"] {
+            margin-top: 15px;
+            background: linear-gradient(90deg, #4a90e2, #2f4f4f);
+            color: white;
+            padding: 11px 38px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1.11rem;
+            font-weight: 700;
+            box-shadow: 0 5px 14px rgba(74,144,226,0.11);
+            cursor: pointer;
+            transition: background 0.28s, transform 0.17s;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #2f4f4f, #4a90e2);
+            transform: scale(1.04);
+        }
+        @media (max-width: 520px) {
+            main {
+                padding: 15px 3vw 7px 3vw;
+            }
+            h1 { font-size: 1.2rem;}
+            label, input, button { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href='admin-home'>Home</a>
+        <a href='all-books'>All Books</a>
+        <a href='all-books2'>All Books2</a>
+        <a href='all-books3'>All Books3</a>
+        <a href='logout'>Logout</a>
+    </nav>
+</header>
+<main>
+    <h1>Edit Book Details</h1>
+    <hr>
+    <div class="msg" th:if="${msg}" th:text="${msg}"></div>
+    <form th:action="@{/updateBook}" method="post" enctype="multipart/form-data" th:object="${book}">
+        <label>Book Name:</label>
+        <input type="text" th:field="*{name}" readonly />
+
+        <label>Author Name:</label>
+        <input type="text" th:field="*{aname}" />
+
+        <label>Publisher Name:</label>
+        <input type="text" th:field="*{pname}" />
+
+        <label>Price:</label>
+        <input type="number" th:field="*{price}" />
+
+        <label>Current Image:</label>
+        <img class="preview-img" th:src="@{/getImage(name=${book.name})}" alt="Current Image" />
+
+        <label>Update Image:</label>
+        <input type="file" name="imageFile" accept=".jpg,.png,.jpeg" />
+
+        <label>Update PDF Content:</label>
+        <input type="file" name="contentFile" accept=".pdf" />
+
+        <button type="submit">Update Book</button>
+    </form>
+</main>
+</body>
+</html>

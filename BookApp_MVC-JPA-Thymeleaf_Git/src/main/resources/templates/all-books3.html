@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Books (Paginated)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="favIcon.png" type="image/x-icon">
+    <style>
+       body {
+	     margin: 0;
+	     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	     /*background: linear-gradient(120deg, #a0c1b8, #fefefe);*/
+	     background: linear-gradient(120deg, rgba(74, 144, 226, 0.65) 0%,
+		         rgba(160, 193, 184, 0.55) 100%),
+		         url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80')
+		         no-repeat center center fixed;
+	     background-size: cover;
+	     min-height: 100vh;
+	     display: flex;
+	     flex-direction: column;
+	     align-items: center;
+	     padding: 20px 10px;
+        }
+        header {
+            width: 100%;
+            max-width: 980px;
+            margin-bottom: 28px;
+        }
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 13px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2f4f4f;
+            font-weight: 600;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 7px;
+            box-shadow: 1px 1px 6px rgba(63,77,77,0.13);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover {
+            background: #3a8fd7;
+            color: white;
+        }
+        main {
+            background: white;
+            max-width: 1150px;
+            width: 99vw;
+            border-radius: 18px;
+            box-shadow: 0 4px 28px rgba(0,0,0,0.13);
+            padding: 32px 28px 24px 28px;
+        }
+        h1 {
+            color: #114b5f;
+            font-size: 2.08rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        hr {
+            border: none;
+            border-bottom: 1.7px solid #ddd;
+            margin: 15px 0 15px 0;
+        }
+        .welcome {
+            font-size: 1.08rem;
+            font-weight: 500;
+            color: #07477f;
+            margin-bottom: 10px;
+        }
+        .msg {
+            font-weight: 600;
+            color: #1b8c39;
+            min-height: 24px;
+            margin-bottom: 13px;
+        }
+        h2 {
+            color: #1a4570;
+            font-weight: 600;
+            margin-bottom: 18px;
+            font-size: 1.23rem;
+        }
+
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            padding: 13px 0 14px 0;
+            background: #f5f5fa;
+            border-radius: 8px;
+            font-size: 1.06rem;
+            box-shadow: 0 2px 11px rgba(90,140,210,0.08);
+        }
+        .pagination-bar a {
+            color: #2278c6;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 5px;
+            transition: background 0.17s, color 0.19s;
+        }
+        .pagination-bar a:hover {
+            background: #ecebf3;
+            color: #0b488d;
+            text-decoration: underline;
+        }
+
+        .books-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 27px;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        .book-card {
+            background: #fff;
+            box-shadow: 0 3.5px 24px rgba(80, 80, 150, 0.16);
+            border-radius: 13px;
+            padding: 19px 13px 15px 13px;
+            max-width: 270px;
+            width: 92vw;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: box-shadow 0.15s, transform 0.18s;
+        }
+        .book-card:hover {
+            background: linear-gradient(120deg, #f2e9e4 60%, #a0c1b8 100%);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(74, 144, 226, 0.19);
+        }
+        .book-card img {
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: #e7eaf6;
+            box-shadow: 0 2.5px 8px rgba(80, 80, 150, 0.13);
+            height: 100px;
+        }
+        .book-card p {
+            color: #314e70;
+            font-size: 1.04rem;
+            margin: 5px 0 2px 0;
+        }
+        .book-card span {
+            color: #0d355a;
+            font-weight: 600;
+        }
+        .book-card a {
+            color: #2278c6;
+            font-size: 0.99rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.17s;
+        }
+        .book-card a:hover {
+            color: #1568b3;
+            text-decoration: underline;
+        }
+        form {
+            display: inline;
+        }
+        .book-card button {
+            margin-top: 6px;
+            background: linear-gradient(90deg, #4a90e2, #2f4f4f);
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 7px;
+            font-size: 0.96rem;
+            font-weight: 600;
+            box-shadow: 0 2px 7px rgba(74,144,226,0.15);
+            cursor: pointer;
+            transition: background 0.22s, transform 0.15s;
+        }
+        .book-card button:hover {
+            background: linear-gradient(90deg, #2f4f4f, #4a90e2);
+            transform: scale(1.06);
+        }
+
+        @media (max-width: 850px) {
+            main { padding: 18px 6vw 12px 6vw;}
+        }
+        @media (max-width: 650px) {
+            .books-list { gap: 14px;}
+            main { padding: 8px 1vw 7px 1vw;}
+            h1 { font-size: 1.06rem;}
+            h2 { font-size: 1.04rem;}
+            .pagination-bar { font-size: 0.98rem; gap: 13px;}
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href='admin-home'>Home</a>
+        <a href='all-books'>All Books</a>
+        <a href='all-books2'>All Books (DTO)</a>
+        <a href='all-books3'>All Books (Paginated)</a>
+        <a href='logout'>Logout</a>
+    </nav>
+</header>
+<main>
+    <h1>Book Search App</h1>
+    <hr>
+    <div class="welcome">
+        Welcome <span th:text="${session.name}"></span>
+    </div>
+    <div class="msg" th:text="${msg}"></div>
+    <h2>All Books (Paginated)</h2>
+    <section class="pagination-bar">
+        <a th:if="${currentPage > 0}" th:href="@{/all-books3(page=${currentPage - 1}, size=3)}">Previous</a>
+        <span th:text="'Page ' + (${currentPage}+1) + ' of ' +${totalPages}"></span>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/all-books3(page=${currentPage + 1}, size=3)}">Next</a>
+    </section>
+    <div class="books-list">
+        <div class="book-card" th:each="book : ${books}">
+            <img th:src="@{/getImage(name=${book.name})}" height="100px" />
+            <p>Name: <span th:text="${book.name}"></span> </p>
+            <p>Author Name: <span th:text="${book.aname}"></span> </p>
+            <p>Publisher Name: <span th:text="${book.pname}"></span> </p>
+            <p>Price: Rs <span th:text="${book.price}"></span> </p>
+            <p th:if="${book.hasContent==true}">
+                <a th:href='@{/viewPDF(name=${book.name})}' target="_blank">View PDF</a>
+                &nbsp;&nbsp;&nbsp;
+                <a th:href='@{/downloadPDF(name=${book.name})}'>Download PDF</a>
+            </p>
+            <form th:action="@{/deleteBook}" method="get" style="margin-top: 10px;">
+                <input type="hidden" name="name" th:value="${book.name}" />
+                <button type="submit">Delete Book</button>
+            </form>
+            <form th:action="@{/editBook}" method="get" target="_blank" style="margin-top: 5px;">
+                <input type="hidden" name="name" th:value="${book.name}" />
+                <button type="submit">Edit Book</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Book Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="favIcon.png" type="image/x-icon">
+    <style>
+        body {
+	     margin: 0;
+	     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	     /*background: linear-gradient(120deg, #a0c1b8, #fefefe);*/
+	     background: linear-gradient(120deg, rgba(74, 144, 226, 0.65) 0%,
+		         rgba(160, 193, 184, 0.55) 100%),
+		         url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80')
+		         no-repeat center center fixed;
+	     background-size: cover;
+	     min-height: 100vh;
+	     display: flex;
+	     flex-direction: column;
+	     align-items: center;
+	     padding: 20px 10px;
+        }
+        header {
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 25px;
+        }
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #2f4f4f;
+            font-weight: 600;
+            background: white;
+            padding: 8px 18px;
+            border-radius: 8px;
+            box-shadow: 1px 1px 6px rgba(63, 77, 77, 0.14);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav a:hover {
+            background: #3a8fd7;
+            color: white;
+        }
+        main {
+            width: 100%;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 2.1rem;
+            margin-bottom: 8px;
+            letter-spacing: 1.1px;
+        }
+        hr {
+            border: none;
+            border-bottom: 1.7px solid #ddd;
+            margin: 15px 0 20px;
+        }
+        h2 {
+            color: #f3f7fb;
+            font-weight: 600;
+            margin-bottom: 22px;
+            margin-top: 12px;
+        }
+
+        .books-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        .book-card {
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(80, 80, 150, 0.13);
+            border-radius: 14px;
+            padding: 23px 14px 17px 14px;
+            max-width: 260px;
+            width: 90vw;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: transform 0.18s;
+        }
+        .book-card:hover {
+            background: linear-gradient(120deg, #f2e9e4 60%, #a0c1b8 100%);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(74, 144, 226, 0.16);
+        }
+        .book-card img {
+            border-radius: 6px;
+            margin-bottom: 11px;
+            background: #e7eaf6;
+            box-shadow: 0 2.5px 8px rgba(80, 80, 150, 0.11);
+            height: 108px;
+        }
+        .book-card p {
+            color: #314e70;
+            font-size: 1.06rem;
+            margin: 6px 0 3px 0;
+        }
+        .book-card span {
+            color: #0d355a;
+            font-weight: 600;
+        }
+
+        @media (max-width: 650px) {
+            .books-list {
+                flex-direction: column;
+                gap: 12px;
+            }
+            main {
+                padding: 0 5vw;
+            }
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="admin-login">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Book Search App</h1>
+        <hr>
+        <h2>Search Results :</h2>
+        <div class="books-list">
+            <div class="book-card" th:each="book : ${books}">
+                <img alt="img" th:src="@{/getImage(name=${book.name})}" height="100px" />
+                <p>Name : <span th:text="${book.name}"></span></p>
+                <p>Author Name : <span th:text="${book.aname}"></span></p>
+                <p>Publisher Name : <span th:text="${book.pname}"></span></p>
+                <p>Price : Rs <span th:text="${book.price}"></span></p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
